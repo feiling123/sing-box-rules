@@ -1,0 +1,51 @@
+name: Compile Rule Set to SRS
+
+on:
+  push:
+    paths:
+      - 'rules/**/*.json'
+      - '.github/workflows/compile-srs.yml'
+  workflow_dispatch:          # 支持手动触发
+  schedule:
+    - cron: '0 3 * * *'       # 每天 UTC 3:00 自动跑一次（可选，不需要可删）
+
+permissions:
+  contents: write
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install sing-box
+        run: |
+          VERSION=1.13.15          # 可改成你需要的版本，建议 ≥1.10
+          curl -fsSL -o sing-box.tar.gz \
+            "https://github.com/SagerNet/sing-box/releases/download/v${VERSION}/sing-box-${VERSION}-linux-amd64.tar.gz"
+          tar -xzf sing-box.tar.gz
+          sudo mv "sing-box-${VERSION}-linux-amd64/sing-box" /usr/local/bin/
+          sing-box version
+
+      - name: Compile JSON → SRS
+        run: |
+          mkdir -p rule_srs
+          find rules -type f -name '*.json' | while read -r f; do
+            name=$(basename "$f" .json)
+            echo "Compiling: $f → rule_srs/${name}.srs"
+            sing-box rule-set compile "$f" -o "rule_srs/${name}.srs"
+          done
+          ls -lh rule_srs/
+
+      - name: Commit & Push SRS
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add rule_srs/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update SRS $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push
+          fi
