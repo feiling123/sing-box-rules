@@ -1,0 +1,53 @@
+{
+  "version": 2,
+  "rules": [
+    {
+      "domain_suffix": [
+        "anthropic.com",
+        "amazonaws.com",
+        "meta.com",
+        "clau.de",
+        "claude.ai",
+        "claude.com",
+        "claudemcpclient.com",
+        "claudemcpcontent.com",
+        "claudeusercontent.com",
+        "cursor-cdn.com",
+        "cursor.com",
+        "cursor.sh",
+        "cursorapi.com",
+        "todesktop.com",
+        "elevenlabs.io",
+        "facebook.com",
+        "fbcdn.net",
+        "intercom.io",
+        "intercomcdn.com",
+        "meta.ai",
+        "metaaivm.com",
+        "muse.ai",
+        "nexus-websocket-a.intercom.io",
+        "sentry.io",
+        "statsigapi.net",
+        "workos.com"
+      ],
+      "domain": [
+        "anthropic-com.ghost.io",
+        "auth0.com",
+        "anthropic.com.cdn.cloudflare.net",
+        "browser-intake-us5-datadoghq.com",
+        "usefathom.com",
+        "servd-anthropic-website.b-cdn.net"
+      ],
+      "domain_keyword": [
+        "datadog",
+        "sift",
+        "sentry",
+        "category-ntp"
+      ],
+      "ip_cidr": [
+        "160.79.104.0/21",
+        "2607:6bc0::/32"
+      ]
+    }
+  ]
+}
